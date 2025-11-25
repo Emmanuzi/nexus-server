@@ -15,10 +15,10 @@ We follow a Git Flow–style workflow:
 - The `main` branch contains stable, production-ready code.
 - Nobody pushes directly to `main`.
 
-### Develop Branch
+### Inspect Branch
 
-- The `develop` branch is where active development happens.
-- All feature branches must be created from `develop`.
+- The `inspect` branch is where active development happens.
+- All feature branches must be created from `inspect`.
 
 ### Feature Branches
 
@@ -37,17 +37,17 @@ feature/<feature-name>
 When your feature is ready:
 
 1. Push your branch.
-2. Open a Pull Request (PR) into `develop`.
+2. Open a Pull Request (PR) into `inspect`.
 3. Wait for review and approval.
 
 ## 2. How to Contribute Code
 
 ### Step 1 — Create a Feature Branch
 
-From `develop`:
+From `inspect`:
 
 ```bash
-git checkout develop
+git checkout inspect
 git pull
 git checkout -b feature/<feature-name>
 ```
@@ -79,7 +79,7 @@ git push -u origin feature/<feature-name>
 
 1. Go to GitHub → Pull Requests → New PR
 2. Set:
-   - **Base branch:** `develop`
+   - **Base branch:** `inspect`
    - **Compare branch:** your feature branch
 3. Add a short description of what you did.
 4. Assign the reviewer (project lead).
@@ -99,7 +99,7 @@ If changes are needed:
 
 1. Reviewer leaves comments
 2. Contributor updates the branch
-3. Reviewer approves and merges to `develop`
+3. Reviewer approves and merges to `inspect`
 
 ## 4. Folder Structure to Follow
 
