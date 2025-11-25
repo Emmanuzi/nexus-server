@@ -97,7 +97,7 @@ You can test your server by placing extra files inside the `www/` folder:
 
 - **Project Lead:** Emmanuel Kiplimo
 - **Backend Developer:** Faith Bonareri
-- **Backend Developer:** Daniel Mwango
+- **Backend Developer:** Daniel Mwago
 
 ## Contribution Guide
 
