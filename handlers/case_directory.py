@@ -11,7 +11,7 @@ class CaseDirectoryIndexFile(BaseCase):
     """
     
     def test(self, handler):
-        pass  # Logic coming in next commit
+        pass 
 
     def act(self, handler):
-        pass  # Logic coming in next commit
+        pass
