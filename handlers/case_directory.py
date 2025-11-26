@@ -11,7 +11,24 @@ class CaseDirectoryIndexFile(BaseCase):
     """
     
     def test(self, handler):
-        pass 
+        """
+        Checks if the request path is a directory AND contains index.html.
+        """
+        # 1. Is the requested path a directory?
+        is_dir = os.path.isdir(handler.full_path)
+        
+        # 2. Does index.html exist inside it? 
+        # (We use the helper method index_path() from BaseCase)
+        has_index = os.path.isfile(self.index_path(handler))
+        
+        return is_dir and has_index
 
     def act(self, handler):
-        pass
+        """
+        Serves the index.html file.
+        """
+        # Calculate the path to index.html
+        full_path = self.index_path(handler)
+        
+        # Use the helper method from BaseCase to send the file
+        self.handle_file(handler, full_path)
