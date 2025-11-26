@@ -1,17 +1,27 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
+from handlers.base_case import BaseCase
+
 
 class RequestHandler(BaseHTTPRequestHandler):
     """Handle HTTP requests."""
     
+    def send_content(self, content, status=200):
+        """Send content to the client."""
+        self.send_response(status)
+        self.send_header("Content-type", "text/html")
+        self.send_header("Content-Length", str(len(content)))
+        self.end_headers()
+        self.wfile.write(content)
+    
+    def handle_error(self, msg):
+        """Send a 404 error message."""
+        content = f"Error: {msg}".encode('utf-8')
+        self.send_content(content, 404)
+    
     def do_GET(self):
         """Handle GET requests."""
-        # Basic implementation - will be extended with case handlers later
-        self.send_response(200)
-        self.send_header('Content-type', 'text/html')
-        self.end_headers()
-        
-        message = "<h1>Hello! The server is working!</h1>"
-        self.wfile.write(message.encode('utf-8'))
+        message = "<h1>Server is running. BaseCase setup complete.</h1>"
+        self.send_content(message.encode('utf-8'))
 
 
 def main():
@@ -31,4 +41,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
