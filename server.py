@@ -29,7 +29,7 @@ class RequestHandler(BaseHTTPRequestHandler):
             case.act(self)
         else:
             # Fallback when no index.html found
-            msg = "Not Found:Directory does not contain an index.html file"
+            msg = "Directory does not contain an index.html file"
             self.handle_error(msg)
 
 
