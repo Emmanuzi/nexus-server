@@ -1,14 +1,16 @@
-# handlers/case_directory.py
+import os
+from handlers.base_case import BaseCase
 
-class CaseDirectory:
-    def __init__(self):
-        # initialize anything you need
-        pass
+class CaseDirectory(BaseCase):
+    """Serve a directory if the requested path is a folder."""
 
     def test(self, handler):
-        # logic for testing a directory
-        pass
+        """Return True if the requested path is a directory."""
+        full_path = handler.translate_path(handler.path)
+        return os.path.isdir(full_path)
 
     def act(self, handler):
-        # logic for handling the directory
-        pass
+        """Serve index.html inside the directory using BaseCase helper."""
+        full_path = handler.translate_path(handler.path)
+        index_file = os.path.join(full_path, "index.html")
+        return self.handle_file(handler, index_file)

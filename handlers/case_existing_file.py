@@ -1,15 +1,18 @@
-from handlers.base_case  import BaseCase
 import os
+from handlers.base_case  import BaseCase
+
 
 class CaseExistingFile(BaseCase):
 
 
     def test(self, handler):
+        """Return True if the requested path is a file."""
+        full_path = handler.translate_path(handler.path)
+        return os.path.isfile(full_path)
 
-        path = handler.translate_path(handler.path) #returns true if the requested path is an existing file
-        return os.path.isfile(path)
-    
     def act(self, handler):
-        handler.handle_file()#serve the file using the handler's file-serving method
+        """Serve the file using BaseCase's handle_file method."""
+        full_path = handler.translate_path(handler.path)
+        return self.handle_file(handler, full_path)
     
 

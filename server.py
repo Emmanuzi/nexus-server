@@ -1,8 +1,10 @@
-import os
-from http.server import HTTPServer, BaseHTTPRequestHandler 
+
+from http.server import HTTPServer, SimpleHTTPRequestHandler 
 from handlers.case_no_file import CaseNoFile
 from handlers.case_existing_file import CaseExistingFile
 from handlers.case_directory import CaseDirectory
+import os
+import urllib
 
 Cases = [
     CaseNoFile(),
@@ -10,11 +12,18 @@ Cases = [
     CaseDirectory(),
 ]
 
-class MyHandler(BaseHTTPRequestHandler):
+class MyHandler(SimpleHTTPRequestHandler):
+    
+    def translate_path(self, path):
+        """Map URL path to filesystem path under 'www' folder."""
+        path = urllib.parse.unquote(path)
+        # Use 'www' as root folder
+        full_path = os.path.join(os.getcwd(), "www", path.lstrip("/"))
+        return full_path
 
-    def path_exists(self):
-        path = self.translate_path(self.path)
-        return os.path.exists(path)
+
+
+
 
     def do_GET(self):
         # Try each case in order
@@ -28,20 +37,10 @@ class MyHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(b"Server is running!")
 
-    def handle_file(self):
-        path = self.translate_path(self.path)
-
-        try:
-            with open(path, "rb") as file:
-                self.send_response(200)
-                self.end_headers()
-                self.wfile.write(file.read())
-        except FileNotFoundError:
-            self.send_error(404, "File not found")
+    
 
 
 PORT = 8000
-os.chdir("www")
 server = HTTPServer(("localhost", PORT), MyHandler)
 print(f"Server running at http://localhost:{PORT}")
 server.serve_forever()
