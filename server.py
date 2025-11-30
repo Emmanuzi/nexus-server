@@ -1,12 +1,12 @@
+import os
 from http.server import HTTPServer, BaseHTTPRequestHandler
-from handlers.base_case import BaseCase
-
+from handlers.case_directory import CaseDirectoryIndexFile
 
 class RequestHandler(BaseHTTPRequestHandler):
-    """Handle HTTP requests."""
+    """Main HTTP request handler for the server."""
     
     def send_content(self, content, status=200):
-        """Send content to the client."""
+        """Sends HTTP response with content to the client."""
         self.send_response(status)
         self.send_header("Content-type", "text/html")
         self.send_header("Content-Length", str(len(content)))
@@ -14,14 +14,23 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.wfile.write(content)
     
     def handle_error(self, msg):
-        """Send a 404 error message."""
+        """Sends a 404 error message."""
         content = f"Error: {msg}".encode('utf-8')
         self.send_content(content, 404)
     
     def do_GET(self):
         """Handle GET requests."""
-        message = "<h1>Server is running. BaseCase setup complete.</h1>"
-        self.send_content(message.encode('utf-8'))
+        # Calculate absolute path to requested file
+        self.full_path = os.getcwd() + self.path
+        
+        # Try to handle directory index request
+        case = CaseDirectoryIndexFile()
+        if case.test(self):
+            case.act(self)
+        else:
+            # Fallback when no index.html found
+            msg = "Directory does not contain an index.html file"
+            self.handle_error(msg)
 
 
 def main():
