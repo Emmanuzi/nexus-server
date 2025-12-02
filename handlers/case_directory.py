@@ -32,3 +32,13 @@ class CaseDirectoryIndexFile(BaseCase):
         
         # Use the helper method from BaseCase to send the file
         self.handle_file(handler, full_path)
+
+
+class CaseDirectoryNoIndexFile(BaseCase):
+    def test(self, handler):
+        is_dir = os.path.isdir(handler.full_path)
+        has_no_index = not os.path.isfile(self.index_path(handler))
+        return is_dir and has_no_index
+
+    def act(self, handler):
+        return handler.list_dir()      
