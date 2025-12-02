@@ -1,52 +1,48 @@
+
+from http.server import HTTPServer, SimpleHTTPRequestHandler 
+from handlers.case_no_file import CaseNoFile
+from handlers.case_existing_file import CaseExistingFile
+from handlers.case_directory import CaseDirectory
 import os
-from http.server import HTTPServer, BaseHTTPRequestHandler
-from handlers.case_directory import CaseDirectoryIndexFile
+import urllib
 
-class RequestHandler(BaseHTTPRequestHandler):
-    """Main HTTP request handler for the server."""
+Cases = [
+    CaseNoFile(),
+    CaseExistingFile(),
+    CaseDirectory(),
+]
+
+class MyHandler(SimpleHTTPRequestHandler):
     
-    def send_content(self, content, status=200):
-        """Sends HTTP response with content to the client."""
-        self.send_response(status)
-        self.send_header("Content-type", "text/html")
-        self.send_header("Content-Length", str(len(content)))
-        self.end_headers()
-        self.wfile.write(content)
-    
-    def handle_error(self, msg):
-        """Sends a 404 error message."""
-        content = f"Error: {msg}".encode('utf-8')
-        self.send_content(content, 404)
-    
+    def translate_path(self, path):
+        """Map URL path to filesystem path under 'www' folder."""
+        path = urllib.parse.unquote(path)
+        # Use 'www' as root folder
+        full_path = os.path.join(os.getcwd(), "www", path.lstrip("/"))
+        return full_path
+
+
+
+
+
     def do_GET(self):
-        """Handle GET requests."""
-        # Calculate absolute path to requested file
-        self.full_path = os.getcwd() + self.path
-        
-        # Try to handle directory index request
-        case = CaseDirectoryIndexFile()
-        if case.test(self):
-            case.act(self)
-        else:
-            # Fallback when no index.html found
-            msg = "Directory does not contain an index.html file"
-            self.handle_error(msg)
+        # Try each case in order
+        for case in Cases:
+            if case.test(self):
+                return case.act(self)
 
+        # fallback
+        self.send_response(200)
+        self.send_header("Content-type", "text/html")
+        self.end_headers()
+        self.wfile.write(b"Server is running!")
 
-def main():
-    """Run the server."""
-    server_address = ('', 8080)
-    httpd = HTTPServer(server_address, RequestHandler)
     
-    print("Server running on http://localhost:8080")
-    print("Press Ctrl+C to stop the server")
-    
-    try:
-        httpd.serve_forever()
-    except KeyboardInterrupt:
-        print("\nShutting down server...")
-        httpd.shutdown()
 
 
-if __name__ == '__main__':
-    main()
+PORT = 8000
+server = HTTPServer(("localhost", PORT), MyHandler)
+print(f"Server running at http://localhost:{PORT}")
+server.serve_forever()
+
+
