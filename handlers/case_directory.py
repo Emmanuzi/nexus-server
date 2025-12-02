@@ -1,7 +1,6 @@
 import os
 from handlers.base_case import BaseCase
 
-
 class CaseDirectoryIndexFile(BaseCase):
     """
     Serves index.html when a directory request contains one.
@@ -33,6 +32,7 @@ class CaseDirectoryIndexFile(BaseCase):
         
         # Use the helper method from BaseCase to send the file
         self.handle_file(handler, full_path)
+
 
 
 class CaseDirectoryNoIndexFile(BaseCase):
