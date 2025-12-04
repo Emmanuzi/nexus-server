@@ -8,12 +8,12 @@ The goal of this project is to learn how web servers work internally by building
 
 This project implements:
 
-- ✔ Basic HTTP request handling.
-- ✔ Serving static HTML files.
-- ✔ Directory listing.
-- ✔ Custom 404 error handling.
-- ✔ Simple Python CGI execution (optional but included).
-- ✔ Clean modular architecture using "case handlers".
+-  Basic HTTP request handling.
+-  Serving static HTML files.
+-  Directory listing.
+-  Custom 404 error handling.
+-  Simple Python CGI execution (optional but included).
+-  Clean modular architecture using "case handlers".
 
 ## Project Structure
 
@@ -103,7 +103,7 @@ You can test your server by placing extra files inside the `www/` folder:
 
 For details on contributing, branching, and pull requests, see:
 
-➡ [CONTRIBUTING.md](CONTRIBUTING.md)
+ [CONTRIBUTING.md](CONTRIBUTING.md)
 
 (Everything you need is in there.)
 
